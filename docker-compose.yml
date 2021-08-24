@@ -1,0 +1,33 @@
+version: '3.7'
+services:
+  postgres:
+    image: library/postgres:13.0-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_PASSWORD: "user"
+      POSTGRES_USER: "user"
+      POSTGRES_DB: "postgres"
+    restart: always
+    volumes:
+      - ./env/postgres/data:/var/lib/postgresql/data
+
+  deps:
+    image: tomcat
+    ports:
+      - "7000:8080"
+    container_name: tomcat-deps
+    volumes:
+      - ./deps/build/libs/deps.war:/usr/local/tomcat/webapps/ROOT.war
+    depends_on:
+      - postgres
+
+  docs:
+    image: tomcat
+    ports:
+      - "7070:8080"
+    container_name: tomcat-docs
+    volumes:
+      - ./docs/build/libs/docs.war:/usr/local/tomcat/webapps/ROOT.war
+    depends_on:
+      - postgres

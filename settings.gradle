@@ -1,0 +1,3 @@
+rootProject.name = 'MyDocs'
+include 'deps'
+include 'docs'
